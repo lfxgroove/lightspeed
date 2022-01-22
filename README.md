@@ -21,7 +21,7 @@ Demo: [quirky-perlman-34d0da.netlify.com](https://quirky-perlman-34d0da.netlify.
   - [Footer menu](#footer-menu)
   - [SEO](#seo)
   - [Footer text](#footer-text)
-  - [Sass](#Sass)
+  - [Sass](#sass)
 - [Original](#original)
 - [License](#license)
 
