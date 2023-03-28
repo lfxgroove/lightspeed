@@ -1,7 +1,13 @@
 {% extends "index.html" %}
 
-{% block title %}{{ page.title }} &middot; {{ config.title }}{% endblock title %}
-{% block description %}{{ page.description | default(value=config.description) }}{% endblock description %}
+{% block title %}{{ page.title }} &middot; {{ trans(key="title", lang=lang) }}{% endblock title %}
+{% block description %}
+{% if page.description %}
+  {{ page.description }}
+{% else %}
+  {{ trans(key="description", lang=lang) }}
+{% endif %}
+{% endblock description %}
 
 {% block ogtitle %}{{ page.title }}{% endblock ogtitle %}
 {% block ogdesc %}{{ page.description }}{% endblock ogdesc %}
