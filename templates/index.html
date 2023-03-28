@@ -7,8 +7,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>{% block title %}{{ config.title }} &middot; {{ config.description }}{% endblock title %}</title>
-    <meta name="description" content="{% block description %}{{ config.description }}{% endblock description %}" />
+    <title>{% block title %}{{ trans(key="title", lang=lang) }} &middot; {{ trans(key="description", lang=lang) }}{% endblock title %}</title>
+    <meta name="description" content="{% block description %}{{ trans(key="description", lang=lang) }}{% endblock description %}" />
     <link rel="shortcut icon"  href="{{ get_url(path="favicon.ico") | safe }}" />
     <link rel="alternate" type="application/atom+xml" title="RSS" href="{{ get_url(path="atom.xml") | safe }}">
 
@@ -16,13 +16,13 @@
     <style>{{ data | safe }}</style>
 
     {% block seo -%}
-      <meta property="og:site_name" content="{% block ogsitename %}{{config.title}}{% endblock ogsitename %}">
+      <meta property="og:site_name" content="{% block ogsitename %}{{ trans(key="title", lang=lang) }}{% endblock ogsitename %}">
       {% if config.extra.author -%}
         <meta name="author" content="{{ config.extra.author }}" />
       {%- endif %}
-      <meta property="og:title" content="{% block ogtitle %}{{config.title}}{% endblock ogtitle %}">
-      <meta property="og:description" content="{% block ogdesc %}{{config.description}}{% endblock ogdesc %}">
-      <meta property="og:url" content="{% block ogurl %}{{config.base_url | safe }}{% endblock ogurl %}">
+      <meta property="og:title" content="{% block ogtitle %}{{ trans(key="title", lang=lang) }}{% endblock ogtitle %}">
+      <meta property="og:description" content="{% block ogdesc %}{{ trans(key="description", lang=lang) }}{% endblock ogdesc %}">
+      <meta property="og:url" content="{% block ogurl %}{{ get_url(path="/", lang=lang) | safe }}{% endblock ogurl %}">
       <meta property="og:image" content="{% block ogimage %}{% if config.extra.ogimage %}{{ get_url(path=config.extra.ogimage) | safe }}{% endif %}{% endblock ogimage %}">
 
       {% if page.date -%}
@@ -46,12 +46,11 @@
 
   <body>
     <main id="main" role="main">
-
       {% block header %}
       <header role="banner">
         <h3 style="margin-top:0;">
-          <a href="{{ config.base_url | safe }}" title="Home">{{ config.title }}</a>
-          <br /><small>{{ config.description }}</small>
+          <a href="{{ get_url(path="/", lang=lang) | safe }}" title="Home">{{ trans(key="title", lang=lang) }}</a>
+          <br /><small>{{ trans(key="description", lang=lang) }}</small>
         </h3>
       </header>
       <hr />
@@ -69,10 +68,12 @@
       <footer role="contentinfo">
         <hr />
         {% if config.extra.footer_links %}
+        {% set footer_links = config.extra.footer_links[lang] | default(value=config.extra.footer_links) %}
         <nav style="margin-bottom:1rem;" role="navigation">
-          {% for item in config.extra.footer_links %}
-            <a href="{{ item.url | replace(from="$BASE_URL", to=config.base_url) | safe }}">{{ item.name }}</a>
-            {% if loop.last %}{% else %}
+          {% set base_url = get_url(path="", lang=lang) %}
+          {% for item in footer_links %}
+            <a href="{{ item.url | replace(from="$BASE_URL", to=base_url) | safe }}">{{ item.name }}</a>
+            {% if not loop.last %}
               <span>&middot;</span>
             {% endif %}
           {% endfor %}
@@ -84,7 +85,10 @@
           {%- if config.extra.netlify %} & hosted on <a href="https://netlify.com">Netlify</a>{%- endif -%}
           {%- if config.extra.zola or config.extra.zola is undefined -%}.<br />{%- endif %}
           {% if config.extra.maintained_with_love or config.extra.maintained_with_love is undefined%}Maintained with &hearts; for the web.<br />{% endif %}
-          {% if config.extra.footer_tagline %}{{ config.extra.footer_tagline }}{% endif %}
+          {% if config.extra.footer_tagline %}
+          {% set footer_tagline = config.extra.footer_tagline[lang] | default(value=config.extra.footer_tagline) %}
+          {% if footer_tagline %}{{ footer_tagline }}{% endif %}
+          {% endif %}
         </small>
         {% endblock taglines %}
       </footer>
