@@ -1,7 +1,6 @@
-{% macro post_in_list(post) %}
+{% component post_in_list(post: map) %}
 <li>
   <a href="{{ post.permalink | safe }}">{{ post.title }}</a>
-  <time style="font-size:90%;" datetime="{{ post.date | date(format="%+") }}">{{ post.date | date(format="%B %d, %Y") }}</time>
+  <time style="font-size:90%;" datetime="{{ post.date | date(format="%T") }}">{{ post.date | date(format="%B %d, %Y") }}</time>
 </li>
-{% endmacro post_in_list %}
-
+{% endcomponent post_in_list %}

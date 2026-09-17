@@ -18,6 +18,24 @@
   {%- endif -%}
 {%- endblock ogimage %}
 
+{% block seo_date %}
+  {% if page.date -%}
+    <meta property="og:type" content="article" />
+    <meta property="article:published_time" content="{{ page.date | date(format="%T") }}" />
+  {%- endif %}
+{% endblock seo_date %}
+
+{% block seo_page_earlier %}
+  {% if page.earlier -%}
+    <link rel="prev" href="{{ page.earlier.permalink | safe }}" />
+  {%- endif %}
+{% endblock seo_page_earlier %}
+{% block seo_page_later %}
+  {% if page.later -%}
+    <link rel="next" href="{{ page.later.permalink | safe }}" />
+  {%- endif %}
+{% endblock seo_page_later %}
+
 
 {% block content %}
 <article>

@@ -1,5 +1,3 @@
-{% import "macros.html" as macros %}
-
 <!DOCTYPE html>
 <html lang="en">
   {% block head %}
@@ -23,17 +21,12 @@
       <meta property="og:url" content="{% block ogurl %}{{ get_url(path="/", lang=lang) | safe }}{% endblock ogurl %}">
       <meta property="og:image" content="{% block ogimage %}{% if config.extra.ogimage %}{{ get_url(path=config.extra.ogimage) | safe }}{% endif %}{% endblock ogimage %}">
 
-      {% if page.date -%}
-        <meta property="og:type" content="article" />
-        <meta property="article:published_time" content="{{ page.date | date(format="%+") }}" />
-      {%- endif %}
-
-      {% if page.earlier -%}
-        <link rel="prev" href="{{ page.earlier.permalink | safe }}" />
-      {%- endif %}
-      {% if page.later -%}
-        <link rel="next" href="{{ page.later.permalink | safe }}" />
-      {%- endif %}
+      {% block seo_date %}
+      {% endblock seo_date %}
+      {% block seo_page_earlier %}
+      {% endblock seo_page_earlier %}
+      {% block seo_page_later %}
+      {% endblock seo_page_later %}
     {%- endblock seo -%}
 
     {% block extra_head %}
@@ -57,7 +50,8 @@
       {% block content %}
       <ul class="homepage-list">
         {% for post in section.pages %}
-          {{ macros::post_in_list(post=post) }}
+          {%<post_in_list post={post}>%}
+          {%</post_in_list>%}
         {% endfor %}
       </ul>
       {% endblock content %}
